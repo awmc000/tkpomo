@@ -6,33 +6,36 @@ Apr 23 - 24th, 2024
 Alex McColm
 '''
 from datetime import timedelta
-from pygame import mixer
 import tkinter as tk
-import tkinter.ttk as ttk
+from tkinter import ttk
 import os.path
+from pygame import mixer
 
 class PomodoroTimerApp(tk.Frame):
+    '''
+    The pomodoro timer application class extends tk.Frame.
+    '''
     # Whether or not the timer is started.
     started = False
-    
+
     # True if user is in work period, False if on break.
     active = True
-    
+
     pomodoro_minutes = 35
     break_minutes = 10
-    
+
     # Timer starts on "work" period.
     time_remaining = timedelta(minutes=pomodoro_minutes)
-    
+
     # Colour to set widgets to for the respective modes.
     colours = {"pomodoro": "#f05b56", "break": "#57f15c"}
-    
-    def valid_time(self, P):
+
+    def valid_time(self, p):
         '''
         Function used to validate input to timer length
         fields. Checks if the input is empty or digits.
         '''
-        return str.isdigit(P) or P == ""
+        return str.isdigit(p) or p == ""
 
     def toggle_settings(self, event):
         '''
@@ -50,7 +53,7 @@ class PomodoroTimerApp(tk.Frame):
             self.short_break_label.pack()
             self.short_break_entry.pack()
             self.confirm_button.pack()
-    
+
     def toggle_timer(self, event):
         '''
         Toggle whether the timer is running or stopped.
@@ -101,39 +104,39 @@ class PomodoroTimerApp(tk.Frame):
                 self.done_sound.play()
                 self.skip_state(None)
         window.after(1000, self.update)
-        
+
     def confirm_settings(self, event):
         '''
         Save study/break period times to the .conf file.
         '''
         pomodoro_input = self.pomodoro_time_entry.get()
         break_input = self.short_break_entry.get()
-        
+
         if pomodoro_input.isdigit():
             self.pomodoro_minutes = int(pomodoro_input)
         if break_input.isdigit():
             self.break_minutes = int(break_input)
-            
-        with open('pomodo.conf', 'w') as file:
-                file.write(f'pomodoro\t{self.pomodoro_minutes}'
-                    f'\nbreak\t{self.break_minutes}')
-    
+
+        with open('pomodo.conf', 'w', encoding="utf-8") as file:
+            file.write(f'pomodoro\t{self.pomodoro_minutes}'
+                f'\nbreak\t{self.break_minutes}')
+
     def get_time_remaining(self):
         '''
         Return the time left in the form MM:SS.
         '''
         return str(self.time_remaining)[2:]
-    
+
     def __init__(self, parent, *args, **kwargs):
         tk.Frame.__init__(self, parent, *args, **kwargs)
         self.parent = parent
 
         # Check if a config file exists saving the user's times
         if os.path.isfile('pomodoro.conf'):
-            with open('pomodoro.conf', 'w') as file:
+            with open('pomodoro.conf', 'w', encoding="utf-8") as file:
                 print(file.read())
         else:
-            with open('pomodo.conf', 'w') as file:
+            with open('pomodo.conf', 'w', encoding="utf-8") as file:
                 file.write(f'pomodoro\t{self.pomodoro_minutes}'
                     f'\nbreak\t{self.break_minutes}')
 
@@ -141,14 +144,14 @@ class PomodoroTimerApp(tk.Frame):
         mixer.init()
         self.start_sound = mixer.Sound("start.mp3")
         self.done_sound = mixer.Sound("done.mp3")
-        
+
         # Style to use for large text
         self.style = ttk.Style()
-        self.style.configure("BW.TLabel", 
+        self.style.configure("BW.TLabel",
             foreground="black",
             background="#f05b56",
             font=("sans-serif", 28))
-                
+
         vtcb = self.register(self.valid_time)
         # self.state_label = ttk.Label(text="POMODORO", style="BW.TLabel")
         self.time_label = ttk.Label(text=self.get_time_remaining(), style="BW.TLabel")
@@ -170,16 +173,16 @@ class PomodoroTimerApp(tk.Frame):
 
         self.settings_button = ttk.Button(self.parent, text='Settings')
         self.settings_button.bind('<Button-1>', self.toggle_settings)
-        
+
         self.confirm_button = ttk.Button(self.parent, text="Confirm")
         self.confirm_button.bind('<Button-1>', self.confirm_settings)
-        
+
         self.time_label.pack()
         self.timer_button.pack(side=tk.LEFT)
         self.reset_button.pack(side=tk.LEFT)
         self.skip_button.pack(side=tk.LEFT)
         self.settings_button.pack(side=tk.LEFT)
-        
+
         parent.configure(background=self.colours['pomodoro'])
         parent.title('[POMODORO] Timer')
 
