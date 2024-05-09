@@ -21,6 +21,9 @@ class PomodoroTimerApp(tk.Frame):
     # True if user is in work period, False if on break.
     active = True
 
+    # False if the break is short, True if it is long. 
+    long_break = False
+
     pomodoro_minutes = 35
     break_minutes = 10
 
@@ -72,7 +75,13 @@ class PomodoroTimerApp(tk.Frame):
         if self.active:
             self.time_remaining = timedelta(minutes=self.pomodoro_minutes)
         else:
-            self.time_remaining = timedelta(minutes=self.break_minutes)
+            if not self.long_break:
+                self.time_remaining = timedelta(minutes=self.break_minutes)
+                self.long_break = True
+            else:
+                self.time_remaining = timedelta(minutes=2*self.break_minutes)
+                self.long_break = False
+                
         self.time_label.config(text=self.get_time_remaining())
         self.started = False
         self.timer_button.config(text="Start")
@@ -159,7 +168,7 @@ class PomodoroTimerApp(tk.Frame):
         self.pomodoro_time_label = ttk.Label(text='Pomodoro time:')
         self.pomodoro_time_entry = ttk.Entry(validate="all", validatecommand=(vtcb, '%P'))
 
-        self.short_break_label = ttk.Label(text='Short break time:')
+        self.short_break_label = ttk.Label(text='Short break time\n(long break will be double):')
         self.short_break_entry = ttk.Entry(validate="all", validatecommand=(vtcb, '%P'))
 
         self.timer_button = ttk.Button(self.parent, text='Start')
