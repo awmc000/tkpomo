@@ -126,7 +126,7 @@ class PomodoroTimerApp(tk.Frame):
         if break_input.isdigit():
             self.break_minutes = int(break_input)
 
-        with open('pomodo.conf', 'w', encoding="utf-8") as file:
+        with open('pomodoro.conf', 'w', encoding="utf-8") as file:
             file.write(f'pomodoro\t{self.pomodoro_minutes}'
                 f'\nbreak\t{self.break_minutes}')
 
@@ -145,7 +145,7 @@ class PomodoroTimerApp(tk.Frame):
             with open('pomodoro.conf', 'w', encoding="utf-8") as file:
                 print(file.read())
         else:
-            with open('pomodo.conf', 'w', encoding="utf-8") as file:
+            with open('pomodoro.conf', 'w', encoding="utf-8") as file:
                 file.write(f'pomodoro\t{self.pomodoro_minutes}'
                     f'\nbreak\t{self.break_minutes}')
 
