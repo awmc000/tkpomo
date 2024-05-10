@@ -1,3 +1,22 @@
+# Check for pygame and pyinstaller.
+LIST=$(pip list)
+
+if grep -q 'pyinstaller' <<< $LIST
+then
+    echo "pyinstaller is installed."
+else
+    echo "pyinstaller was not found. Install it with \"pip install pyinstaller\""
+    exit 1
+fi
+
+if grep -q 'pygame' <<< $LIST
+then
+    echo "pygame is installed."
+else
+    echo "pygame was not found. Install it with \"pip install pygame\""
+    exit 1
+fi
+
 # Bundle the program into a binary.
 pyinstaller main.py --onefile \
 --add-data pomodoro.conf:pomodoro.conf \
