@@ -142,7 +142,7 @@ class PomodoroTimerApp(tk.Frame):
 
         # Check if a config file exists saving the user's times
         if os.path.isfile('pomodoro.conf'):
-            with open('pomodoro.conf', 'w', encoding="utf-8") as file:
+            with open('pomodoro.conf', 'r', encoding="utf-8") as file:
                 print(file.read())
         else:
             with open('pomodoro.conf', 'w', encoding="utf-8") as file:
