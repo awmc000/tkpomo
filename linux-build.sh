@@ -19,6 +19,7 @@ fi
 
 # Bundle the program into a binary.
 pyinstaller main.py --onefile \
+--hidden-import=tkinter -y \
 --add-data pomodoro.conf:pomodoro.conf \
 --add-data start.mp3:start.mp3 \
 --add-data done.mp3:done.mp3
